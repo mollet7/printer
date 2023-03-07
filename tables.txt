@@ -1,0 +1,23 @@
+`id`, `buy_date`, `use_date`, `alert_date`, `replace_date`, `buy_status`
+
+
+db: toner_usage
+table: usage_data
+
+*KGAMBONI*
+
+1. Magodani   kuanzia: Mil. 3 ukubwa sqm: 300 Bei kwa squremeter ni 10,000/=
+
+2. Ukooni Estate Kunazia Mil. 4 ukubwa wa sqm 300 , bei kwa sqm 15,000/=
+
+3. Ukooni Residence   kuanzia: Mil. 5 ukubwa sqm: 304 Bei kwa squremeter ni 17,000/=
+
+4. Dege Residence Kunazia Mil. 11 ukubwa wa sqm 500 , bei kwa sqm 20,000/=
+
+5. Coco Palm   kuanzia: Mil 12. ukubwa sqm: 600 Bei kwa squremeter ni 20,000/=
+
+6. Chekeni Farm-1  Kunazia Mil 10 ukubwa wa sqm 700 , bei kwa sqm 14,000/=
+
+7. Chekeni Farm-2   kuanzia: Mil 5. ukubwa sqm: 500 Bei kwa squremeter ni 10,000/=
+
+8. Riverside-3 Kunazia Mil 20 ukubwa wa sqm 800 , bei kwa sqm 25,000/=

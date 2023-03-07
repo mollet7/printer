@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST!</title>
+</head>
+<body>
+    <h1 id="header">anonymous function</h1>
+    <p id="para1"></p>
+
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" />
+    <label for="password">Password</label>
+    <input type="password" name="password" id="pass" />
+
+<script>
+    const result = document.getElementById('header');
+    const input = document.getElementById('name');
+    const pass = document.getElementById('password');
+    const para1 = document.getElementById('para1');
+
+    function keyLog(event){
+        console.log(`You presed "${event.key}".`);
+
+    }
+    input.addEventListener('keydown', keyLog);
+
+    // above is the similar to this. instead of defining a separate logKey() function, you can pass an anonymous fucntion 
+    input.addEventListener('keydown', function(event){
+        console.log(`Yu pressed "${event.key}".`);
+        result.textContent = `${event.key}`;
+    });
+</script>
+
+<h1 id="header2">Arrow functions</h1>
+<input id="textBox" type="text"></input>
+<div id="output"></div>
+
+<script>
+const textBox = document.querySelector("#textBox");
+const output = document.querySelector("#output");
+
+textBox.addEventListener('keydown', (event) => output.textContent = `You pressed "${event.key}".`);
+
+</script>
+</body>
+</html>
