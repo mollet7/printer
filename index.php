@@ -116,7 +116,9 @@ window.addEventListener('load',function() {
 
     //Get webpage element tag 
     for (let i = 0; i < numRows; i++) {
-        console.log(numRows[i]);
+        console.log(numRows);
+        console.log(`This is paragraph ${i}`);
+
         
     }
 });
