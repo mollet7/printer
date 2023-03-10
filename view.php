@@ -2,6 +2,43 @@
     require_once "includes/config.php";
 ?>
 <?php
+function toner_status($buy_date, $use_date, $replace_date){
+                                $buy_date_object = new DateTime($buy_date);
+                                $buy_date = $buy_date_object -> format ('Y-m-d');
+
+                                $use_date_object = new DateTime($use_date);
+                                $use_date = $use_date_object -> format ('Y-m-d');
+
+                                $replace_date_object = new DateTime($replace_date);
+                                $replace_date = $replace_date_object -> format ('Y-m-d');
+
+                                $default_date = '2023-01-01';
+                                $default_date_object = new DateTime($default_date);
+                                $default_date = $default_date_object -> format ('Y-m-d');
+
+                                // logic
+                                if ($replace_date == '2023-01-01') {
+                                    echo "<b class='status-one'>NOT USED</b>";
+                                }elseif ($use_date > $default_date) {
+                                    echo "<b class='status-two'>IN USE</b>";
+                                }elseif($replace_date >= $use_date && $replace_date != $default_date) {
+                                    echo "<b class='status-three'>REPLACED</b>";
+                                }
+                           }
+
+    function day_used($buy_date,$replace_date){
+        $buy_date_object = new DateTime($buy_date);
+        //$buy_date = $buy_date_object -> format ('Y-m-d');
+
+        $replace_date_object = new DateTime($replace_date);
+        //$replace_date = $replace_date_object -> format ('Y-m-d');
+
+        $interval = $buy_date_object ->diff($replace_date_object);
+        echo $interval->format('%a days');
+    }
+?>
+
+<?php
 // Check existence of id parameter before processing further
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
   
@@ -98,7 +135,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         
                         <p><label>Buy status</label>: <b><?php echo $row["buy_status"]; ?></b></p>
                     </div>
-                    <label for="status">Toner Status</label> : <span id="toner_status"></span>
+                    <label for="status">Toner Status</label> : <span id="toner_status"><?php toner_status($row['buy_date'],$row['use_date'],$row['replace_date']);?></span>
+                    <label for="day_used">Day Used</label> : <span><?php day_used($row['buy_date'],$row['replace_date']);?></span>
                     <p><a href="index.php" class="btn btn-primary">Back</a></p>
                 </div>
             </div>        
@@ -116,66 +154,3 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 </body>
 </html>
 
-<script>
-    // inputs from webpages and new assigned
-    const default_date = '2023-01-01';
-    const buy_date = document.getElementById('buy_date').textContent;
-    console.log(buy_date);
-    const use_date = document.getElementById('use_date').textContent;
-    const replace_date = document.getElementById('replace_date').textContent;
-    const toner_status = document.getElementById('toner_status');
-
-    //processing the inputed data
-
-    function checkStatus(){
-        if (buy_date > default_date){
-            console.log('NOT USED')
-            let  result = 'NOT USED';
-            toner_status.textContent = result;
-        } else if (use_date > default_date){
-            console.log('IN USE')
-            let result = 'IN USE';
-            toner_status.textContent = result;
-        } else if (replace_date > default_date){
-            console.log('REPLACED')
-            let result = 'REPLACED';
-            toner_status.textContent = result;
-        } else {
-            console.log('Your Logic Error!')
-        }   
-    }
-    checkStatus()
-
-  
-    
-
-
-
-</script>
-
-
-<script>
-    /* var notUsed = localStorage.getItem('notUsed');
-    document.getElementById('toner_status<?php echo $row['id']; ?>').innerText = notUsed;
-    console.log(notUsed);
-
-    var inUse = localStorage.getItem('inUse');
-    document.getElementById('toner_status').innerText = inUse;
-    console.log(inUse);
-
-    var replace = localStorage.getItem('replace');
-    document.getElementById('toner_status').innerText = replace;
-    console.log(replace); */
-
-    /* var notUsed = localStorage.getItem('notUsed');
-    document.getElementById('toner_status<?php echo $row['id']; ?>').innerText = notUsed;
-    console.log(notUsed);
-
-    var inUse = localStorage.getItem('inUse');
-    document.getElementById('toner_status<?php echo $row['id']; ?>').innerText = inUse;
-    console.log(inUse);
-
-    var replace = localStorage.getItem('replace');
-    document.getElementById('toner_status<?php echo $row['id']; ?>').innerText = replace;
-    console.log(replace); */
-</script>

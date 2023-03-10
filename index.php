@@ -19,6 +19,22 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+<style>
+    .status-one {
+        background-color: blue;
+        color: white;
+    }
+    .status-two {
+        background-color: green;
+        color: white;
+    }
+
+    .status-three {
+        background-color: black;
+        color: white;
+    }
+    
+</style>
 <body>
 
 <div class="container">
@@ -31,9 +47,7 @@ session_start();
                     <div class="mt-5 mb-3 clearfix">
                         <h2 class="pull-left">Toner Details</h2>
                         <a href="submit-data.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add another Toner</a>
-                    </div>
-                   
-                    
+                    </div>                  
                 <?php   // Attempt select query execution
                     $column_to_sort = "model , buy_date";
                     $limit = 100; // Number of results per page
@@ -62,17 +76,40 @@ session_start();
                                 <tbody> 
                            <?php 
                             $counter = 1;
+                           function toner_status($buy_date, $use_date, $replace_date){
+                                $buy_date_object = new DateTime($buy_date);
+                                $buy_date = $buy_date_object -> format ('Y-m-d');
+
+                                $use_date_object = new DateTime($use_date);
+                                $use_date = $use_date_object -> format ('Y-m-d');
+
+                                $replace_date_object = new DateTime($replace_date);
+                                $replace_date = $replace_date_object -> format ('Y-m-d');
+
+                                $default_date = '2023-01-01';
+                                $default_date_object = new DateTime($default_date);
+                                $default_date = $default_date_object -> format ('Y-m-d');
+
+                                // logic
+                                if ($replace_date == '2023-01-01') {
+                                    echo "<b class='status-one'>NOT USED</b>";
+                                }elseif ($use_date > $default_date) {
+                                    echo "<b class='status-two'>IN USE</b>";
+                                }elseif($replace_date >= $use_date && $replace_date != $default_date) {
+                                    echo "<b class='status-three'>REPLACED</b>";
+                                }
+                           }
                            ?>
                             <?php  while($row = mysqli_fetch_array($result)){ ?>
-                                   <tr>
-                                        <td> <? echo  $counter;?></td>
+                                   <tr> 
+                                        <td id="counter"> <? echo  $counter;?></td>
                                         <td> <? echo $row['model']; ?></td>
                                         <td id="buyDate<? echo $row['id']; ?>" ><? echo $row['buy_date']; ?></td>
                                         <td id="useDate<? echo $row['id']; ?>" ><? echo $row['use_date']; ?></td>
                                         <td id="alertDate<? echo $row['id']; ?>" ><? echo $row['alert_date']; ?></td>
                                         <td id="replaceDate<? echo $row['id']; ?>" ><? echo $row['replace_date']; ?></td>
-                                        <td id="buyStatus"> <? echo $row['buy_status']; ?></td>
-                                        <td id="toner_status><? echo $row['id']; ?>" name="toner_status">no status</td>
+                                        <td id="buy_Status<? echo $row['id']; ?>" ><? echo $row['buy_status']; ?></td>
+                                        <td id="toner_status<? echo $row['id']; ?>" name="toner_status"><?php toner_status($row['buy_date'],$row['use_date'],$row['replace_date']); ?></td>
                                         <td>
                                             <a href="view.php?id=<? echo $row['id']; ?>" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
                                             <a href="update.php?id=<? echo $row['id'];?>" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
@@ -109,18 +146,22 @@ session_start();
 
 <script>
 window.addEventListener('load',function() {
-    //Get the number of table rows
-    const table = document.getElementById('dataTable');
-    const numRows = table.rows.length;
-    console.log(numRows);
+    //Get the starting database id.
+    let startingIdTag = document.getElementById('<?php echo $starting_id;?>');
+    console.log(startingIdTag);
+    let startingId = startingIdTag.id;
+    console.log(startingId);
 
+    
+    
+    
     //Get webpage element tag 
-    for (let i = 0; i < numRows; i++) {
-        console.log(numRows);
-        console.log(`This is paragraph ${i}`);
-
-        
-    }
+    for (let i = 7; i > startingId; i++) {
+        //get the date generated with id from webpage.
+        const buyDateElement = document.getElementById('buyDate'+ i);
+        console.log(buyDateElement);
+ 
+    } 
 });
 </script>
 </html>
