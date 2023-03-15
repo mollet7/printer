@@ -4,7 +4,7 @@
 <?php
 function toner_status($buy_date, $use_date, $replace_date){
                                 $buy_date_object = new DateTime($buy_date);
-                                $buy_date = $buy_date_object -> format ('Y-m-d');
+                                $buy_date = $buy_date_object -> format ('d-m-Y');
 
                                 $use_date_object = new DateTime($use_date);
                                 $use_date = $use_date_object -> format ('Y-m-d');
@@ -17,24 +17,39 @@ function toner_status($buy_date, $use_date, $replace_date){
                                 $default_date = $default_date_object -> format ('Y-m-d');
 
                                 // logic
-                                if ($replace_date == '2023-01-01') {
+                                if ($use_date == '2023-01-01' && $replace_date == $default_date) {
                                     echo "<b class='status-one'>NOT USED</b>";
-                                }elseif ($use_date > $default_date) {
+                                }elseif ($use_date > $default_date && $replace_date == $default_date) {
                                     echo "<b class='status-two'>IN USE</b>";
                                 }elseif($replace_date >= $use_date && $replace_date != $default_date) {
                                     echo "<b class='status-three'>REPLACED</b>";
                                 }
                            }
 
-    function day_used($buy_date,$replace_date){
+    function day_used($buy_date,$replace_date,$use_date){
+        $default_date = '2023-01-01';
+        $default_date_object = new DateTime($default_date);
+
         $buy_date_object = new DateTime($buy_date);
         //$buy_date = $buy_date_object -> format ('Y-m-d');
 
         $replace_date_object = new DateTime($replace_date);
         //$replace_date = $replace_date_object -> format ('Y-m-d');
 
-        $interval = $buy_date_object ->diff($replace_date_object);
-        echo $interval->format('%a days');
+        $interval = $replace_date_object ->diff($buy_date_object);
+
+        if ($use_date == $default_date){
+            echo " No day used. Since it is New!";
+        }elseif ($replace_date_object == $default_date_object){
+
+            $today = date('Y-m-d');
+            $seconds_diff = strtotime($today) - strtotime($use_date);
+            $days_diff = floor($seconds_diff / (60 * 60 * 24));
+            echo 'Days Used: <b>'.$days_diff."</b>";
+        }else{
+            echo $interval->format('%a days');
+        }
+        
     }
 ?>
 
@@ -101,6 +116,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/print-styles.css" media="print">
 </head>
 <body>
 
@@ -136,20 +152,14 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         <p><label>Buy status</label>: <b><?php echo $row["buy_status"]; ?></b></p>
                     </div>
                     <label for="status">Toner Status</label> : <span id="toner_status"><?php toner_status($row['buy_date'],$row['use_date'],$row['replace_date']);?></span>
-                    <label for="day_used">Day Used</label> : <span><?php day_used($row['buy_date'],$row['replace_date']);?></span>
-                    <p><a href="index.php" class="btn btn-primary">Back</a></p>
+                    <label for="day_used">Day Used</label> : <span><?php day_used($row['buy_date'],$row['replace_date'],$row['use_date']);?></span>
+                    <p><a href="index.php" class="btn btn-primary hide-print">Back</a></p>
                 </div>
             </div>        
         </div>
     </div>
 </div>
 
-<pre>
-    <code>
-        console.log("Hello");
-        console.log("Name");
-    </code>
-</pre>
 
 </body>
 </html>

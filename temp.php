@@ -1,66 +1,24 @@
-<script>
-    // input from webpage.
-  window.addEventListener('load',function() {
-    const table = document.getElementById('dataTable');
-    const numRows = table.rows.length;
+<?php
+$date1 = '2023-03-10'; // first date in yyyy-mm-dd format
+$date2 = '2023-03-15'; // second date in yyyy-mm-dd format
 
+$seconds_diff = strtotime($date2) - strtotime($date1);
+$days_diff = floor($seconds_diff / (60 * 60 * 24));
+
+echo 'Date 1: '.$date1.'<br>';
+echo 'Date 2: '.$date2.'<br>';
+echo 'Days Difference: '.$days_diff;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tester!</title>
+</head>
+<body>
   
-
-  for (let i = 1; i < numRows; i++){
-    const buyDateElement = document.getElementById('buyDate'+ i);
-    const buyDateId = buyDateElement.id;
-    console.log(buyDateId); 
-    console.log(buyDateElement.textContent);
-    
-
-    const useDateElement = document.getElementById('useDate'+ i);
-    const useDateId = useDateElement.id;
-    console.log(useDateId); 
-
-    const replaceDateElement = document.getElementById('replaceDate'+ i);
-    const replaceDateId = replaceDateElement.id;
-    console.log(replaceDateId); 
-
-    const toner_statusElement = document.getElementById('toner_status'+ i);
-    const toner_statusId = toner_statusElement.id;
-    let status;
-
-    
-    //console.log(toner_statusId);
-    
-    const defaultDate = '2023-01-01';
-    if (buyDateElement.innerHTML > useDateElement.innerText) {
-        
-        document.getElementById(toner_statusId).innerText = "NOT USED";
-        status = 1;
-        document.getElementById(toner_statusId).style.backgroundColor = "#aab7b8";
-        var notUsed = 'NOT USED';
-        localStorage.setItem('notUsed', notUsed);
-        
-        
-
-    } else if (useDateElement.innerHTML > defaultDate ){
-        
-        document.getElementById(toner_statusId).innerText = "IN USE";
-        status = 2;
-        document.getElementById(toner_statusId).style.backgroundColor = "#31eb0c";
-        var inUse = "IN USE";
-        localStorage.setItem('inUse', inUse);
-        
-        
-        
-    } else if (replaceDateElement.innerHTML > defaultDate){
-        
-        document.getElementById(toner_statusId).innerText = "REPLACED";
-        status = 3;
-        document.getElementById(toner_statusId).style.backgroundColor = "yellow";
-        var replace = 'REPLACED';
-        localStorage.setItem('replace', replace);
-    } else {
-        console.log('Wrong!');
-    }
-  }
-});
-
-   
-</script>
+</body>
+</html>

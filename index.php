@@ -18,6 +18,8 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/print-styles.css" media="print">
 </head>
 <style>
     .status-one {
@@ -46,7 +48,7 @@ session_start();
                 <div class="col-md-12">
                     <div class="mt-5 mb-3 clearfix">
                         <h2 class="pull-left">Toner Details</h2>
-                        <a href="submit-data.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add another Toner</a>
+                        <a href="submit-data.php" class="btn btn-success pull-right hide-print"><i class="fa fa-plus"></i> Add another Toner</a>
                     </div>                  
                 <?php   // Attempt select query execution
                     $column_to_sort = "model , buy_date";
@@ -70,7 +72,7 @@ session_start();
                                         <th>Replace Date</th>
                                         <th>Buy Status</th>
                                         <th>Toner Status</th>
-                                        <th>Action</th>
+                                        <th class="hide-print">Action</th>
                                    </tr>
                                 </thead>
                                 <tbody> 
@@ -90,10 +92,10 @@ session_start();
                                 $default_date_object = new DateTime($default_date);
                                 $default_date = $default_date_object -> format ('Y-m-d');
 
-                                // logic
-                                if ($replace_date == '2023-01-01') {
+                                // logic ya kuangalia kama imetumika ama laa!
+                                if ($use_date == '2023-01-01' && $replace_date == $default_date) {
                                     echo "<b class='status-one'>NOT USED</b>";
-                                }elseif ($use_date > $default_date) {
+                                }elseif ($use_date > $default_date && $replace_date == $default_date) {
                                     echo "<b class='status-two'>IN USE</b>";
                                 }elseif($replace_date >= $use_date && $replace_date != $default_date) {
                                     echo "<b class='status-three'>REPLACED</b>";
@@ -110,7 +112,7 @@ session_start();
                                         <td id="replaceDate<? echo $row['id']; ?>" ><? echo $row['replace_date']; ?></td>
                                         <td id="buy_Status<? echo $row['id']; ?>" ><? echo $row['buy_status']; ?></td>
                                         <td id="toner_status<? echo $row['id']; ?>" name="toner_status"><?php toner_status($row['buy_date'],$row['use_date'],$row['replace_date']); ?></td>
-                                        <td>
+                                        <td class="hide-print">
                                             <a href="view.php?id=<? echo $row['id']; ?>" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
                                             <a href="update.php?id=<? echo $row['id'];?>" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
                                             <a href="delete.php?id=<? echo $row['id'];?>" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
@@ -121,12 +123,12 @@ session_start();
                                
                                 </tbody>                          
                            </table>
-                        <?php
-                            
+                        <?php  
                             // Free result set
                             mysqli_free_result($result); ?>
+                            <button onclick = "window.print()" class="hide-print">Print</button>
                          <?   } else { ?>
-                                <div class="alert alert-danger"><em>No records were found.</em></div>
+                                <div class="alert alert-danger hide-print"><em>No records were found.</em></div>
                        <? }
                     } else{
                         echo "Oops! Something went wrong. Please try again later.";
@@ -139,30 +141,10 @@ session_start();
             </div>        
         </div>
     </div>
-  <a href="submit-data.php"><button type="button" class="btn btn-primary btn-block"><i class="fa fa-plus"></i>Add Toner</button> </a>
+  <a href="submit-data.php"><button type="button" class="btn btn-primary btn-block hide-print"><i class="fa fa-plus"></i>Add Toner</button> </a>
 </div>
 
 </body>
 
-<script>
-window.addEventListener('load',function() {
-    //Get the starting database id.
-    let startingIdTag = document.getElementById('<?php echo $starting_id;?>');
-    console.log(startingIdTag);
-    let startingId = startingIdTag.id;
-    console.log(startingId);
-
-    
-    
-    
-    //Get webpage element tag 
-    for (let i = 7; i > startingId; i++) {
-        //get the date generated with id from webpage.
-        const buyDateElement = document.getElementById('buyDate'+ i);
-        console.log(buyDateElement);
- 
-    } 
-});
-</script>
 </html>
 
